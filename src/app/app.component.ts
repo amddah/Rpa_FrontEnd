@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { HttpClientService } from './dashboard/http-client.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,12 +11,45 @@ export class AppComponent {
 
   showHeader: boolean = true;
 
-  constructor(private router: Router) {
+  showSidebar: boolean = true;
+
+  constructor(private router: Router,private http : HttpClientService , private route:ActivatedRoute) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // Vérifiez l'URL pour cacher le header
-        this.showHeader = !(event.url === '/signup' || event.urlAfterRedirects === '/signup');
+        const hiddenHeaderRoutes = ['/signup', '/login'];
+        const hiddenSidebarRoutes = ['/dashboard'];
+
+        this.showHeader = !hiddenHeaderRoutes.includes(event.urlAfterRedirects);
+
+        this.showSidebar = !event.urlAfterRedirects.startsWith('/dashboard');
       }
     });
   }
+
+  
+    
+    
+   
+  ngOnInit(){
+    
+    
+    this.route.queryParams.subscribe(params=>{
+       if(params["code"] !== undefined){
+        console.log("code"+params["code"]);
+        localStorage.setItem("token",params["code"]);
+
+        this.http.getToken(params["code"]).subscribe(result=>{
+          if (result ==true) {
+            this.router.navigateByUrl("/dashboard");
+             
+          } else {
+            console.log("public content");
+            
+          }
+        })
+       }
+    })
+  }
+  
 }

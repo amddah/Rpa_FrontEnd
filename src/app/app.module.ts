@@ -7,6 +7,11 @@ import { HeroSectionComponent } from './hero-section/hero-section.component';
 import { SingUpComponent } from './sing-up/sing-up.component';
 import { FooterComponent } from './footer/footer.component';
 import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { TabComponentComponent } from './dashboard/tab-component/tab-component.component';
+
 
 @NgModule({
   declarations: [
@@ -14,10 +19,14 @@ import { LoginComponent } from './login/login.component';
     HeroSectionComponent,
     SingUpComponent,
     FooterComponent,
-    LoginComponent
+    LoginComponent,
+    DashboardComponent,
+    TabComponentComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
+    RouterModule,
     AppRoutingModule
   ],
   providers: [],
